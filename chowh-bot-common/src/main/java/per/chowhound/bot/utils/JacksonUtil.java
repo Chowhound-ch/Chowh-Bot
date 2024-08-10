@@ -77,7 +77,7 @@ public class JacksonUtil{
             String realContent = toJsonString(content);
             return objectMapper.readTree(realContent);
         } catch (JsonProcessingException e) {
-            e.fillInStackTrace();
+            log.error("JsonNode转换失败", e);
         }
         return NullNode.getInstance();
     }
@@ -94,7 +94,7 @@ public class JacksonUtil{
             String  realContent = JacksonUtil.toJsonString(content);
             return StrUtil.isBlank(realContent)? null : objectMapper.readValue(realContent, valueType);
         } catch (Exception e) {
-            e.fillInStackTrace();
+            log.error("JsonNode转换失败", e);
         }
         return null;
     }
@@ -131,7 +131,7 @@ public class JacksonUtil{
             String realContent = operate == null ? toJsonString(content) : toJsonString(operate.apply(readTree(content)));
             return StrUtil.isBlank(realContent)? null : objectMapper.readValue(realContent, valueType);
         } catch (Exception e) {
-            e.fillInStackTrace();
+            log.error("JsonNode转换失败", e);
         }
         return null;
     }
@@ -202,7 +202,7 @@ public class JacksonUtil{
         try {
             return object instanceof String ?(String) object : objectMapper.writeValueAsString(object);
         } catch (Exception e) {
-            e.fillInStackTrace();
+            log.error("JsonNode转换失败", e);
         }
         return StrUtil.EMPTY_JSON;
     }

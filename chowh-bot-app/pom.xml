@@ -22,7 +22,7 @@
     <dependencies>
         <dependency>
             <groupId>per.chowhound.bot</groupId>
-            <artifactId>chowh-bot-onebot-provider</artifactId>
+            <artifactId>chowh-bot-onebot-napcat-provider</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>

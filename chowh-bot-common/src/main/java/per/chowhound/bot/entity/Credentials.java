@@ -6,11 +6,12 @@ import lombok.ToString;
 
 /**
  * @author : Chowhound
- * @since : 2024/8/8 - 23:34
+ * @since : 2024/8/10 - 16:12
  */
-@EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
 @Data
-public class Friend extends Member{
-    private String remark;
+public class Credentials extends ExpendableEntity {
+    private Long csrf_token;
+    private String cookies;
 }
