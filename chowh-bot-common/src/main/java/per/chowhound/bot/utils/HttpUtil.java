@@ -2,9 +2,12 @@ package per.chowhound.bot.utils;
 
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonNode;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.util.Assert;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.reactive.function.client.ExchangeFilterFunction;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
@@ -18,6 +21,7 @@ import java.util.Map;
  * @author : Chowhound
  * @since : 2024/8/9 - 22:49
  */
+@Slf4j
 @SuppressWarnings("unused")
 public class HttpUtil {
     private final static WebClient webClient;
@@ -26,7 +30,13 @@ public class HttpUtil {
     static {
         webClient = WebClient.builder()
                 .baseUrl("http://localhost:3000") // TODO 配置文件
-                .defaultHeader(HttpHeaders.CONTENT_TYPE, "application/json")
+                .filter(ExchangeFilterFunction.ofRequestProcessor(clientRequest -> {
+                    // 记录请求的详细信息
+                    System.out.println("Request: " + clientRequest.method() + " " + clientRequest.url());
+                    clientRequest.headers().forEach((name, values) -> values.forEach(value -> System.out.println(name + ": " + value)));
+                    return Mono.just(clientRequest);
+                }))
+                .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .build();
     }
 
@@ -338,9 +348,9 @@ public class HttpUtil {
         return doPostResult(url, rType, headers, EMPTY_PARAM, null);
     }
 
-    public static <R> Mono<Result<R>> doPostResult(String url, Class<R> rClass, Map<String, Object> params) {
-        return doPostResult(url, rClass, EMPTY_HEADERS, params, null);
-    }
+//    public static <R> Mono<Result<R>> doPostResult(String url, Class<R> rClass, Map<String, Object> params) {
+//        return doPostResult(url, rClass, EMPTY_HEADERS, params, null);
+//    }
 
     public static <R> Mono<Result<R>> doPostResult(String url, JavaType rType, Map<String, Object> params) {
         return doPostResult(url, rType, EMPTY_HEADERS, params, null);

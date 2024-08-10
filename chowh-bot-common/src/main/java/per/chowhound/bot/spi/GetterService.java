@@ -26,6 +26,7 @@ public interface GetterService {
     default Mono<Result<MessageInfo>> getMsg(Long messageId) {
         throw new UnsupportedException();
     }
+
     default Mono<Result<MessageInfo>> getForwardMsg(Long messageId) {
         throw new UnsupportedException();
     }

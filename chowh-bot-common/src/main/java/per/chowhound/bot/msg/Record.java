@@ -12,7 +12,7 @@ import per.chowhound.bot.entity.ExpendableEntity;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class Record extends Message{
+public class Record extends AbstractMessage {
     private final String type = "record";
 
     private RecordData data;

@@ -16,6 +16,7 @@ import java.util.ServiceLoader;
 public class Getter {
     private static final GetterService GETTER;
     static {
+         //TODO 重写加载逻辑
         ServiceLoader<GetterService> load = ServiceLoader.load(GetterService.class);
         GETTER = load.findFirst().get();
     }

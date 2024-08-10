@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class Text extends Message {
+public class Text extends AbstractMessage {
     private final String type = "text";
 
     private TextData data;
