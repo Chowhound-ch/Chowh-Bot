@@ -1,9 +1,9 @@
 package per.chowhound.bot;
 
+import per.chowhound.bot.entity.CheckRes;
 import per.chowhound.bot.entity.MsgRes;
-import per.chowhound.bot.msg.AbstractMessage;
+import per.chowhound.bot.entity.VoidRes;
 import per.chowhound.bot.msg.Message;
-import per.chowhound.bot.msg.Messages;
 import per.chowhound.bot.msg.Text;
 import per.chowhound.bot.spi.SenderService;
 import per.chowhound.bot.utils.Result;
@@ -66,6 +66,22 @@ public class Sender {
     }
     public static Mono<Result<MsgRes>> sendMsg(String messageType, Long id, Message message, boolean autoEscape) {
         return SENDER.sendMsg(messageType, id, message, autoEscape);
+    }
+    // endregion
+    // region 非消息
+    public static Mono<Result<VoidRes>> sendLike(Long userId) {
+        return SENDER.sendLike(userId, 1);
+    }
+    public static Mono<Result<VoidRes>> sendLike(Long userId, Integer number) {
+        return SENDER.sendLike(userId, number);
+    }
+    // endregion
+    // region 检查是否能发送
+    public static Mono<Result<CheckRes>> canSendImage() {
+        return SENDER.canSendImage();
+    }
+    public static Mono<Result<CheckRes>> canSendRecord() {
+        return SENDER.canSendRecord();
     }
     // endregion
 }

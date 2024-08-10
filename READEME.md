@@ -1,22 +1,31 @@
-package per.chowhound.bot;
+# 基于Java SPI、能对接多种qq bot实现的机器人
+## 支持的框架
+- [x] [OneBot标准] [chowh-bot-onebot-provider](chowh-bot-provider%2Fchowh-bot-onebot-provider)
+- [x] [Napcat] (基于Onebot标准) [chowh-bot-onebot-napcat-provider](chowh-bot-provider%2Fchowh-bot-onebot-napcat-provider)
+## 不同实现间切换方法
+若bot使用的功能仅靠[chowh-bot-common](chowh-bot-common)中的类实现则修改pom.xml中的依赖即可
+#### 注意
+- 请确保只有一个实现在classpath中
+- 不同实现可能涉及不同的功能，这部分功能会单独定义在provider中单独的class，若涉及则切换实现时需要修改代码
+```xml
+    <dependencies>
+        <!-- OneBot标准下的Napcat -->
+        <dependency>
+            <groupId>per.chowhound.bot</groupId>
+            <artifactId>chowh-bot-onebot-napcat-provider</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <!-- OneBot标准 -->
+        <dependency>
+            <groupId>per.chowhound.bot</groupId>
+            <artifactId>chowh-bot-onebot-provider</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
 
-
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import per.chowhound.bot.entity.*;
-import per.chowhound.bot.msg.Image;
-import per.chowhound.bot.msg.Messages;
-import per.chowhound.bot.msg.Text;
-import per.chowhound.bot.utils.Result;
-import reactor.core.publisher.Mono;
-
-import java.util.List;
-
-
-/**
- * @author : Chowhound
- * @since : 2024/8/8 - 22:33
- */
-public class ChowhBotApplication {
+```
+## 使用方法
+```java
     public static void main(String[] args) {
 //        Mono<?> mono = Setter.deleteMsg(2067246370L);
 //        Mono<?> mono = Setter.setGroupKick(811545265L, 2854203740L, false);
@@ -34,7 +43,7 @@ public class ChowhBotApplication {
 
 
 
-        // Sender
+    // Sender
 //        Messages messageTest = Messages.builder()
 //                .text("瑟图")
 //                .image("https://multimedia.nt.qq.com.cn/download?appi" +
@@ -65,10 +74,9 @@ public class ChowhBotApplication {
 //        Mono<?> mono = Getter.getStatus();
 //        Mono<?> mono = Getter.getVersionInfo();
 
-        Object block = mono.block();
-        System.out.println(block);
+    Object block = mono.block();
+    System.out.println(block);
 
-        System.out.println();
-    }
-
+    System.out.println();
 }
+```
