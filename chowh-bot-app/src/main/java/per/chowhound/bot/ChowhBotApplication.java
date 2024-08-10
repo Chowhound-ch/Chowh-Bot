@@ -63,7 +63,7 @@ public class ChowhBotApplication {
 //        Mono<?> mono = Getter.getRecord("1f0b1851392eb90a81a736fcb61b165d.silk", "mp3");
 //        Mono<?> mono = Getter.getImage("1f0b1851392eb90a81a736fcb61b165d.jpg");
 //        Mono<?> mono = Getter.getStatus();
-//        Mono<?> mono = Getter.getVersionInfo();
+        Mono<?> mono = Getter.getVersionInfo();
 
         Object block = mono.block();
         System.out.println(block);
