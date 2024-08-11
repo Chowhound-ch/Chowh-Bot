@@ -13,6 +13,7 @@ import java.util.ServiceLoader;
  * @author : Chowhound
  * @since : 2024/8/8 - 22:48
  */
+@SuppressWarnings("unused")
 public class Getter {
     private static final GetterService GETTER;
     static {

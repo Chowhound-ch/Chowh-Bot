@@ -12,6 +12,7 @@ import java.util.ServiceLoader;
  * @author : Chowhound
  * @since : 2024/8/10 - 23:17
  */
+@SuppressWarnings("unused")
 public class Setter {
     public static final String GROUP_ADD_REQUEST = "add";
     public static final String GROUP_INVITE_REQUEST = "invite";

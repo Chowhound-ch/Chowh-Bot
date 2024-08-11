@@ -15,6 +15,7 @@ import java.util.ServiceLoader;
  * @author : Chowhound
  * @since : 2024/8/8 - 22:48
  */
+@SuppressWarnings("unused")
 public class Sender {
     public static final String GROUP_MSG = "group";
     public static final String PRIVATE_MSG = "private";

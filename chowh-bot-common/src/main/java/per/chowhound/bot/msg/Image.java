@@ -6,7 +6,6 @@ import lombok.*;
  * @author : Chowhound
  * @since : 2024/8/10 - 22:29
  */
-@ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor

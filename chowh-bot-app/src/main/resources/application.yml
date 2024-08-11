@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: chowh-bot-common
+server:
+  port: 4000
+
+logging:
+  level:
+    web: info

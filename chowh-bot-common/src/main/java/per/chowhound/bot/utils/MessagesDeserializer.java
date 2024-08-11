@@ -5,10 +5,7 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import per.chowhound.bot.msg.Forward;
-import per.chowhound.bot.msg.AbstractMessage;
-import per.chowhound.bot.msg.Messages;
-import per.chowhound.bot.msg.Text;
+import per.chowhound.bot.msg.*;
 
 import java.io.IOException;
 
@@ -23,17 +20,8 @@ public class MessagesDeserializer extends JsonDeserializer<Messages> {
         JsonNode root = mapper.readTree(jp);
 
         Messages messages = new Messages(root.size());
-        root.forEach( node -> messages.add(deserializeMessage(node)));
+        root.forEach( node -> messages.add(JacksonUtil.readValue(node, Message.class)));
 
         return messages;
-    }
-
-    public static AbstractMessage deserializeMessage(JsonNode node) {
-        String type = node.get("type").asText();
-        return switch (type) {
-            case "text" -> Text.of(node.get("data").get("text").asText());
-            case "forward" -> new Forward();
-            default -> null;
-        };
     }
 }

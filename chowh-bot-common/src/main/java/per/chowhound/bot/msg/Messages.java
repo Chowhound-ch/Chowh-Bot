@@ -1,20 +1,28 @@
 package per.chowhound.bot.msg;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
+import per.chowhound.bot.utils.MessagesDeserializer;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 
 /**
  * @author : Chowhound
  * @since : 2024/8/10 - 13:58
  */
+@JsonDeserialize(using = MessagesDeserializer.class)
 @NoArgsConstructor
 public class Messages extends ArrayList<Message> implements Message {
     public Messages(int initialCapacity) {
         super(initialCapacity);
+    }
+
+    public Messages(Collection<? extends Message> c) {
+        super(c);
     }
 
     public static Messages of(Message... messages) {
@@ -22,6 +30,7 @@ public class Messages extends ArrayList<Message> implements Message {
         msgs.addAll(Arrays.asList(messages));
         return msgs;
     }
+
 
     public static Builder builder() {
         return new Builder();
