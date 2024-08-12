@@ -13,13 +13,6 @@ import per.chowhound.bot.msg.Messages;
  * @author : Chowhound
  * @since : 2024/8/11 - 13:21
  */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME,
-        property = "message_type"
-)
-@JsonSubTypes({
-        @JsonSubTypes.Type(value = PrivateMessageEvent.class, name = "private"),
-        @JsonSubTypes.Type(value = GroupMessageEvent.class, name = "group"),
-})
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class MessageEvent extends AbstractEvent {

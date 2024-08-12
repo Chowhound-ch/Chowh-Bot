@@ -9,13 +9,6 @@ import lombok.EqualsAndHashCode;
  * @author : Chowhound
  * @since : 2024/8/11 - 22:03
  */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME,
-        property = "request_type"
-)
-@JsonSubTypes({
-        @JsonSubTypes.Type(value = FriendAddRequestEvent.class, name = "friend"),
-        @JsonSubTypes.Type(value = GroupAddRequestEvent.class, name = "group"),
-})
 @EqualsAndHashCode(callSuper = true)
 @Data
 public abstract class RequestEvent extends AbstractEvent{

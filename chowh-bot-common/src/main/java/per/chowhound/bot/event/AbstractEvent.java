@@ -1,5 +1,7 @@
 package per.chowhound.bot.event;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.deser.std.NullifyingDeserializer;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import per.chowhound.bot.entity.ExpendableEntity;
@@ -8,6 +10,7 @@ import per.chowhound.bot.entity.ExpendableEntity;
  * @author : Chowhound
  * @since : 2024/8/11 - 13:21
  */
+@JsonDeserialize(using = NullifyingDeserializer.class)
 @EqualsAndHashCode(callSuper = true)
 @Data
 public abstract class AbstractEvent extends ExpendableEntity implements Event{
