@@ -17,18 +17,18 @@ import per.chowhound.bot.msg.Messages;
 @Data
 public class MessageEvent extends AbstractEvent {
     // 消息类型
-    private String messageType;
+    protected String messageType;
     protected String subType;
     // 消息 ID
-    private Long messageId;
+    protected Long messageId;
     // 发送者 QQ 号
-    private Long userId;
+    protected Long userId;
     // 消息内容
-    private Messages message;
+    protected Messages message;
     // 原始消息内容
-    private String rawMessage;
+    protected String rawMessage;
     // 字体
-    private Long font;
+    protected Long font;
     // 发送人信息
-    private MessageSender sender;
+    protected MessageSender sender;
 }

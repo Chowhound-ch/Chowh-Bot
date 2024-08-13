@@ -56,7 +56,7 @@ public class EventDeserializer extends JsonDeserializer<Event> {
     }
 
     @Data
-    static class EventRelationTree {
+    public static class EventRelationTree {
         private List<EventRelationTree> children;
         private String nextKey;
         private String value;

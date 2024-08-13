@@ -10,6 +10,6 @@ import per.chowhound.bot.utils.EventDeserializer;
  * @author : Chowhound
  * @since : 2024/8/11 - 19:41
  */
-@JsonDeserialize(using = EventDeserializer.class)
-public interface Event {
+//@JsonDeserialize(using = EventDeserializer.class)
+public interface Event{
 }

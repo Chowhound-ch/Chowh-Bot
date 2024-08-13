@@ -11,8 +11,8 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class PrivateMessageEvent extends MessageEvent {
-    // 消息子类型，如果是好友则是 friend，如果是群临时会话则是 group
-    private String subType;
-    // 消息类型
-    private String messageType;
+//    // 消息子类型，如果是好友则是 friend，如果是群临时会话则是 group
+//    private String subType;
+//    // 消息类型
+//    private String messageType;
 }
