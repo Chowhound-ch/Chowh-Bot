@@ -17,7 +17,7 @@ public class GroupMessageEvent extends MessageEvent {
     // 消息类型
     protected String messageType;
     // 群号
-    private String groupId;
+    private Long groupId;
     // 匿名信息，如果不是匿名消息则为 null
     private Anonymous anonymous;
 
