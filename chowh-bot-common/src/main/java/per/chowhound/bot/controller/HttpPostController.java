@@ -10,10 +10,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import per.chowhound.bot.event.*;
 import per.chowhound.bot.msg.Messages;
+import per.chowhound.bot.register.EventHandler;
 import per.chowhound.bot.utils.EventDeserializer;
 import per.chowhound.bot.utils.JacksonUtil;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -49,6 +51,8 @@ public class HttpPostController {
 
     @Autowired
     private ApplicationContext context;
+    @Autowired
+    private EventHandler handler;
 
     @PostMapping("/**")
     public Mono<Map<String, Object>> post(@RequestBody String body, ServerHttpRequest request) {
@@ -56,8 +60,9 @@ public class HttpPostController {
         System.out.println("uri:" + request.getPath());
         JsonNode jsonNode = JacksonUtil.readTree(body);
         Event event = JacksonUtil.readValue(body, EVENT_RELATION_TREE.search(jsonNode));
-        context.publishEvent(event);
+        List<Mono<?>> monos = handler.handleEvent(event);
         System.out.println(event);
+        System.out.println(monos);
 
 //        if (body.get("post_type").equals("message") && body.get("message_type").equals("private")) {
 //            System.out.println("消息类型");

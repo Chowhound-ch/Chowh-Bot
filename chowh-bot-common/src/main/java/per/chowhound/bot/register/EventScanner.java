@@ -8,7 +8,11 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Component;
 import per.chowhound.bot.event.Event;
+import per.chowhound.bot.filter.AlwaysTrueFilter;
+import per.chowhound.bot.filter.EventFilter;
+import per.chowhound.bot.register.utils.EventUtil;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
 import java.util.function.Predicate;
@@ -21,6 +25,8 @@ import java.util.function.Predicate;
 @Component
 public class EventScanner implements ApplicationListener<ApplicationStartedEvent> {
     public Map<Class<? extends Event>, List<Method>> EVENT_MAP;
+    public Map<Method, EventFilter> EVENT_FILTER_MAP = new HashMap<>();
+
     private final Comparator<Method> methodComparator = Comparator.comparing(
             method -> method.getAnnotation(Listener.class).priority());
 
@@ -62,6 +68,23 @@ public class EventScanner implements ApplicationListener<ApplicationStartedEvent
                                  List<Method> methodList = eventMethods.computeIfAbsent(
                                          parameterType.asSubclass(Event.class), key -> new ArrayList<>());
                                  addMethodIntoProprietyList(methodList, method);
+                                 Listener annotation = method.getAnnotation(Listener.class);
+                                 EventFilter filter = null;
+                                 try {
+                                     filter = annotation.filter().getConstructor(Listener.class).newInstance(annotation);
+                                 } catch (Exception e) {
+                                     log.error("事件{}过滤器实例化失败: {}",
+                                             EventUtil.getEventName(annotation, method.getName()), e.getMessage());
+                                 }
+
+                                 if (filter == null) {
+                                     log.info("事件{}将使用always-true过滤器", EventUtil.getEventName(annotation, method.getName()));
+                                     filter = new AlwaysTrueFilter(annotation);
+                                 } else if (log.isDebugEnabled()) {
+                                     log.debug("事件{}注册过滤器: {}", EventUtil.getEventName(annotation, method.getName()), filter.getClass().getSimpleName());
+                                 }
+                                 EVENT_FILTER_MAP.put(method, filter);
+                                 break;
                              }
                          }
                      }
