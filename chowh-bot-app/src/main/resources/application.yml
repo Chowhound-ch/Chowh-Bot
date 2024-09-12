@@ -6,4 +6,5 @@ server:
 
 logging:
   level:
+    per.chowhound: debug
     web: info
