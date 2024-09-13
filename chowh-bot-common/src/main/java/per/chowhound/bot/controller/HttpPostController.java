@@ -9,6 +9,7 @@ import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import per.chowhound.bot.event.*;
+import per.chowhound.bot.event.response.EventResponse;
 import per.chowhound.bot.msg.Messages;
 import per.chowhound.bot.register.EventHandler;
 import per.chowhound.bot.utils.EventDeserializer;
@@ -50,49 +51,19 @@ public class HttpPostController {
     );
 
     @Autowired
-    private ApplicationContext context;
-    @Autowired
     private EventHandler handler;
 
     @PostMapping("/**")
-    public Mono<Map<String, Object>> post(@RequestBody String body, ServerHttpRequest request) {
+    public Mono<EventResponse> post(@RequestBody String body, ServerHttpRequest request) {
         System.out.println("数据:" + body);
         System.out.println("uri:" + request.getPath());
         JsonNode jsonNode = JacksonUtil.readTree(body);
         Event event = JacksonUtil.readValue(body, EVENT_RELATION_TREE.search(jsonNode));
-        List<Mono<?>> monos = handler.handleEvent(event);
+        Mono<EventResponse> monos = handler.handleEvent(event);
         System.out.println(event);
         System.out.println(monos);
 
-//        if (body.get("post_type").equals("message") && body.get("message_type").equals("private")) {
-//            System.out.println("消息类型");
-//            PrivateMessageEvent privateMessageEvent = JacksonUtil.readValue(jsonString, PrivateMessageEvent.class);
-//            System.out.println(privateMessageEvent);
-//            Messages messageTest = Messages.builder()
-//                .text("回复")
-//                .image("http://cdn.wolves.vip/img/ljenvuIEmM6LCerd-jSRUQFQi2dt.png"
-//                ).build();
-//            return Mono.just(Map.of("reply", messageTest));
-//
-//        } else if (body.get("post_type").equals("meta_event")) {
-//            System.out.println("元事件");
-//            if (body.get("meta_event_type").equals("lifecycle")) {
-//                System.out.println("生命周期事件");
-//                LifecycleEvent lifecycleEvent = JacksonUtil.readValue(jsonString, LifecycleEvent.class);
-//                System.out.println(lifecycleEvent);
-//            } else {
-//                System.out.println("心跳事件");
-//                HeartbeatEvent heartbeatEvent = JacksonUtil.readValue(jsonString, HeartbeatEvent.class);
-//                System.out.println(heartbeatEvent);
-//            }
-//
-//        }
-//        if (map.get("post_type").equals("message") && map.get("message_type").equals("private")) {
-//            System.out.println("消息类型");
-//
-//        }
-
-        return Mono.just(Map.of("ddddd", "success"));
+        return monos;
     }
 
 }

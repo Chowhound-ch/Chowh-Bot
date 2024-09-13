@@ -3,15 +3,13 @@ package per.chowhound.bot.register;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import per.chowhound.bot.entity.ExpendableEntity;
-import per.chowhound.bot.entity.MsgRes;
 import per.chowhound.bot.event.Event;
+import per.chowhound.bot.event.response.EventResponse;
 import per.chowhound.bot.register.exception.ListenerNotRegistryExecution;
-import per.chowhound.bot.utils.Result;
+import reactor.core.Disposable;
 import reactor.core.publisher.Mono;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * @author : Chowhound
@@ -23,28 +21,31 @@ public class EventHandler {
     @Autowired
     private EventScanner eventScanner;
 
-    public List<Mono<?>> handleEvent(Event event) {
+    public Mono<EventResponse> handleEvent(Event event) {
         if (eventScanner.EVENT_MAP == null) {
             throw new ListenerNotRegistryExecution("Listener not registry execution");
         }
-        List<Mono<?>> resList = new ArrayList<>();
+        AtomicReference<Mono<EventResponse>> responseMono = new AtomicReference<>();
         eventScanner.EVENT_MAP.get(event.getClass()).forEach(method -> {
-            boolean accessed = eventScanner.EVENT_FILTER_MAP.get(method).filter(method, event);
-            if (!accessed) {
+            if (!method.isAccessed(event)) {
                 return;
             }
 
-            Object res = null;
-            try {
-                res = method.invoke(event);
-            } catch (Exception e) {
-                log.error(e.getMessage(), e);
-            }
+            Object res = method.invoke(event);
 
-            if (res instanceof Mono) {
-                resList.add((Mono<?>) res);
+            if (responseMono.get() == null && res instanceof Mono) {
+                Mono<EventResponse> newValue = ((Mono<?>) res).cast(EventResponse.class)
+                            .onErrorResume(signal -> {
+                        log.error("事件监听方法返回值类型错误: {}, 应该为Mono<? extend EventResponse>", method.getEventName());
+                        return Mono.empty();
+                    });
+                newValue.hasElement().subscribe(value -> {
+                    if (value) {
+                        responseMono.set(newValue);
+                    }
+                });
             }
         });
-        return resList;
+        return responseMono.get();
     }
 }

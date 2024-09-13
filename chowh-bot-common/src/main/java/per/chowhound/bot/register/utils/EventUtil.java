@@ -1,6 +1,5 @@
 package per.chowhound.bot.register.utils;
 
-import org.springframework.context.event.EventListener;
 import per.chowhound.bot.register.Listener;
 
 import java.lang.reflect.Method;
@@ -9,6 +8,7 @@ import java.lang.reflect.Method;
  * @author : Chowhound
  * @since : 2024/9/12 - 21:49
  */
+@SuppressWarnings("unused")
 public class EventUtil {
     public static String getEventName(Method method) {
         if (method == null) {

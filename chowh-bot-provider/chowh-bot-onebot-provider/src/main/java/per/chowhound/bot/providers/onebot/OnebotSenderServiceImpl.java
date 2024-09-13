@@ -7,7 +7,6 @@ import per.chowhound.bot.entity.VoidRes;
 import per.chowhound.bot.msg.Message;
 import per.chowhound.bot.spi.SenderService;
 import per.chowhound.bot.utils.HttpUtil;
-import per.chowhound.bot.utils.JacksonUtil;
 import per.chowhound.bot.utils.Result;
 import reactor.core.publisher.Mono;
 
