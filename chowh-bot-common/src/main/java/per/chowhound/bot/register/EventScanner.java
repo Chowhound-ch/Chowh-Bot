@@ -15,6 +15,7 @@ import per.chowhound.bot.register.utils.EventUtil;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 
@@ -24,8 +25,7 @@ import java.util.function.Predicate;
 @Slf4j
 @Component
 public class EventScanner implements ApplicationListener<ApplicationStartedEvent> {
-    public Map<Class<? extends Event>, List<Method>> EVENT_MAP;
-    public Map<Method, EventFilter> EVENT_FILTER_MAP = new HashMap<>();
+    public Map<Class<? extends Event>, List<EventMethod>> EVENT_MAP;
 
     private final Comparator<Method> methodComparator = Comparator.comparing(
             method -> method.getAnnotation(Listener.class).priority());
@@ -39,8 +39,7 @@ public class EventScanner implements ApplicationListener<ApplicationStartedEvent
         log.info("开始注册事件监听器，basePackage: {}", basePackage);
 
         ConfigurableApplicationContext context = event.getApplicationContext();
-        EVENT_MAP = getEventMethods(basePackage,
-                eventClass -> context.getBeanNamesForType(eventClass).length > 0);
+        EVENT_MAP = getEventMethods(basePackage, context::getBean);
 
         StringBuilder builder = new StringBuilder();
         EVENT_MAP.forEach((key, value) -> builder.append(key.getSimpleName()).append(" : ").append(value.size()).append(",  "));
@@ -49,10 +48,10 @@ public class EventScanner implements ApplicationListener<ApplicationStartedEvent
 
 
 
-    public Map<Class<? extends Event>, List<Method>> getEventMethods(String basePackage, Predicate<Class<?>> eventClassFilter) {
+    public Map<Class<? extends Event>, List<EventMethod>> getEventMethods(String basePackage, Function<Class<?>, Object> eventClassFilter) {
         Map<Class<? extends Event>, List<Method>> eventMethods = new HashMap<>();
         ClassUtil.scanPackage(basePackage).stream()
-                 .filter(eventClassFilter)
+                 .filter(clazz -> eventClassFilter.apply(clazz) != null)
                  .forEach(eventClass -> {
                      Method[] methods = eventClass.getDeclaredMethods();
                      // 遍历方法
