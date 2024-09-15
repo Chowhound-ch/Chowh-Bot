@@ -1,24 +1,18 @@
 package per.chowhound.bot.controller;
 
-import cn.hutool.http.server.HttpServerRequest;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.event.EventListener;
-import org.springframework.http.server.reactive.ServerHttpRequest;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import per.chowhound.bot.event.*;
 import per.chowhound.bot.event.response.EventResponse;
-import per.chowhound.bot.msg.Messages;
 import per.chowhound.bot.register.EventHandler;
+import per.chowhound.bot.spi.QuickResponseService;
 import per.chowhound.bot.utils.EventDeserializer;
 import per.chowhound.bot.utils.JacksonUtil;
 import reactor.core.publisher.Mono;
 
-import java.util.List;
 import java.util.Map;
-import java.util.Objects;
+import java.util.ServiceLoader;
 
 /**
  * @author : Chowhound
@@ -52,18 +46,21 @@ public class HttpPostController {
 
     @Autowired
     private EventHandler handler;
+    private static final QuickResponseService QUICK_RESPONSE;
+    static {
+        //TODO 重写加载逻辑
+        ServiceLoader<QuickResponseService> load = ServiceLoader.load(QuickResponseService.class);
+        QUICK_RESPONSE = load.findFirst().get();
+    }
 
     @PostMapping("/**")
-    public Mono<EventResponse> post(@RequestBody String body, ServerHttpRequest request) {
-        System.out.println("数据:" + body);
-        System.out.println("uri:" + request.getPath());
+    public Mono<?> post(@RequestBody String body) {
         JsonNode jsonNode = JacksonUtil.readTree(body);
         Event event = JacksonUtil.readValue(body, EVENT_RELATION_TREE.search(jsonNode));
-        Mono<EventResponse> monos = handler.handleEvent(event);
-        System.out.println(event);
-        System.out.println(monos);
 
-        return monos;
+        Mono<EventResponse> monos = handler.handleEvent(event);
+
+        return monos.doOnSuccess(res -> QUICK_RESPONSE.handleQuickResponse(res, event));
     }
 
 }

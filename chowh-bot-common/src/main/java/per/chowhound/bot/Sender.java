@@ -1,88 +1,216 @@
 package per.chowhound.bot;
 
-import per.chowhound.bot.entity.CheckRes;
+import lombok.extern.slf4j.Slf4j;
 import per.chowhound.bot.entity.MsgRes;
-import per.chowhound.bot.entity.VoidRes;
 import per.chowhound.bot.msg.Message;
-import per.chowhound.bot.msg.Text;
-import per.chowhound.bot.spi.SenderService;
 import per.chowhound.bot.utils.Result;
-import reactor.core.publisher.Mono;
 
-import java.util.ServiceLoader;
+import java.util.concurrent.ExecutionException;
 
 /**
  * @author : Chowhound
- * @since : 2024/8/8 - 22:48
+ * @since : 2024/9/15 - 19:36
  */
-@SuppressWarnings("unused")
+@Slf4j
+@SuppressWarnings({"unused", "UnusedReturnValue"})
 public class Sender {
-    public static final String GROUP_MSG = "group";
-    public static final String PRIVATE_MSG = "private";
-
-    private static final SenderService SENDER;
-    static {
-        //TODO 重写加载逻辑
-        ServiceLoader<SenderService> load = ServiceLoader.load(SenderService.class);
-        SENDER = load.findFirst().get();
-    }
-    // region 私聊
-    public static Mono<Result<MsgRes>> sendPrivateMsg(Long userId, String text) {
-        return SENDER.sendPrivateMsg(userId, Text.of(text), false);
-    }
-    public static Mono<Result<MsgRes>> sendPrivateMsg(Long userId, Message message) {
-        return SENDER.sendPrivateMsg(userId, message, false);
-    }
-    public static Mono<Result<MsgRes>> sendPrivateMsg(Long userId, String text, boolean autoEscape) {
-        return SENDER.sendPrivateMsg(userId, Text.of(text), false);
-    }
-    public static Mono<Result<MsgRes>> sendPrivateMsg(Long userId, Message message, boolean autoEscape) {
-        return SENDER.sendPrivateMsg(userId, message, autoEscape);
-    }
-    // endregion
-    // region 群聊
-    public static Mono<Result<MsgRes>> sendGroupMsg(Long groupId, String message) {
-        return SENDER.sendGroupMsg(groupId, Text.of(message), false);
-    }
-    public static Mono<Result<MsgRes>> sendGroupMsg(Long groupId, Message message) {
-        return SENDER.sendGroupMsg(groupId, message, false);
-    }
-    public static Mono<Result<MsgRes>> sendGroupMsg(Long groupId, String message, boolean autoEscape) {
-        return SENDER.sendGroupMsg(groupId, Text.of(message), autoEscape);
-    }
-    public static Mono<Result<MsgRes>> sendGroupMsg(Long groupId, Message message, boolean autoEscape) {
-        return SENDER.sendGroupMsg(groupId, message, autoEscape);
+    public static MsgRes sendPrivateMsg(Long userId, String text) {
+        Result<MsgRes> result = null;
+        try {
+            result = MonoSender.sendPrivateMsg(userId, text).toFuture().get();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+        if (result == null) {
+            return null;
+        }
+        return result.getData();
     }
 
-    // endregion
-    // region 通用
-    public static Mono<Result<MsgRes>> sendMsg(String messageType, Long id, String message) {
-        return SENDER.sendMsg(messageType, id, Text.of(message), false);
+    public static MsgRes sendPrivateMsg(Long userId, Message message) {
+        Result<MsgRes> result = null;
+        try {
+            result = MonoSender.sendPrivateMsg(userId, message).toFuture().get();
+
+        } catch (Exception e) {
+            log.error(e.getMessage());
+
+        }        if (result == null) {
+            return null;
+        }
+        return result.getData();
     }
-    public static Mono<Result<MsgRes>> sendMsg(String messageType, Long id, Message message) {
-        return SENDER.sendMsg(messageType, id, message, false);
+
+
+    public static MsgRes sendPrivateMsg(Long userId, String text, boolean autoEscape) {
+        Result<MsgRes> result = null;
+        try {
+            result = MonoSender.sendPrivateMsg(userId, text, autoEscape).toFuture().get();
+
+        } catch (Exception e) {
+            log.error(e.getMessage());
+
+        }        if (result == null) {
+            return null;
+        }
+        return result.getData();
     }
-    public static Mono<Result<MsgRes>> sendMsg(String messageType, Long id, String message, boolean autoEscape) {
-        return SENDER.sendMsg(messageType, id, Text.of(message), autoEscape);
+
+    public static MsgRes sendPrivateMsg(Long userId, Message message, boolean autoEscape) {
+        Result<MsgRes> result = null;
+        try {
+            result = MonoSender.sendPrivateMsg(userId, message, autoEscape).toFuture().get();
+
+        } catch (Exception e) {
+            log.error(e.getMessage());
+
+        }        if (result == null) {
+            return null;
+        }
+        return result.getData();
     }
-    public static Mono<Result<MsgRes>> sendMsg(String messageType, Long id, Message message, boolean autoEscape) {
-        return SENDER.sendMsg(messageType, id, message, autoEscape);
+
+    public static MsgRes sendGroupMsg(Long groupId, String message) {
+        Result<MsgRes> result = null;
+        try {
+            result = MonoSender.sendGroupMsg(groupId, message).toFuture().get();
+
+        } catch (Exception e) {
+            log.error(e.getMessage());
+
+        }        if (result == null) {
+            return null;
+        }
+        return result.getData();
     }
-    // endregion
-    // region 非消息
-    public static Mono<Result<VoidRes>> sendLike(Long userId) {
-        return SENDER.sendLike(userId, 1);
+
+    public static MsgRes sendGroupMsg(Long groupId, Message message) {
+        Result<MsgRes> result = null;
+        try {
+            result = MonoSender.sendGroupMsg(groupId, message).toFuture().get();
+
+        } catch (Exception e) {
+            log.error(e.getMessage());
+
+        }        if (result == null) {
+            return null;
+        }
+        return result.getData();
     }
-    public static Mono<Result<VoidRes>> sendLike(Long userId, Integer number) {
-        return SENDER.sendLike(userId, number);
+
+    public static MsgRes sendGroupMsg(Long groupId, String message, boolean autoEscape) {
+        Result<MsgRes> result = null;
+        try {
+            result = MonoSender.sendGroupMsg(groupId, message, autoEscape).toFuture().get();
+
+        } catch (Exception e) {
+            log.error(e.getMessage());
+
+        }        if (result == null) {
+            return null;
+        }
+        return result.getData();
     }
-    // endregion
-    // region 检查是否能发送
-    public static Mono<Result<CheckRes>> canSendImage() {
-        return SENDER.canSendImage();
+
+    public static MsgRes sendGroupMsg(Long groupId, Message message, boolean autoEscape) {
+        Result<MsgRes> result = null;
+        try {
+            result = MonoSender.sendGroupMsg(groupId, message, autoEscape).toFuture().get();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+        if (result == null) {
+            return null;
+        }
+        return result.getData();
     }
-    public static Mono<Result<CheckRes>> canSendRecord() {
-        return SENDER.canSendRecord();
+
+    public static MsgRes sendMsg(String messageType, Long id, String message) {
+        Result<MsgRes> result = null;
+        try {
+            result = MonoSender.sendMsg(messageType, id, message).toFuture().get();
+
+        } catch (Exception e) {
+            log.error(e.getMessage());
+
+        }        if (result == null) {
+            return null;
+        }
+        return result.getData();
     }
-    // endregion
+
+    public static MsgRes sendMsg(String messageType, Long id, Message message) {
+        Result<MsgRes> result = null;
+        try {
+            result = MonoSender.sendMsg(messageType, id, message).toFuture().get();
+
+        } catch (Exception e) {
+            log.error(e.getMessage());
+
+        }        if (result == null) {
+            return null;
+        }
+        return result.getData();
+    }
+
+    public static MsgRes sendMsg(String messageType, Long id, String message, boolean autoEscape) {
+        Result<MsgRes> result = null;
+        try {
+            result = MonoSender.sendMsg(messageType, id, message, autoEscape).toFuture().get();
+
+        } catch (Exception e) {
+            log.error(e.getMessage());
+
+        }        if (result == null) {
+            return null;
+        }
+        return result.getData();
+    }
+
+    public static MsgRes sendMsg(String messageType, Long id, Message message, boolean autoEscape) {
+        Result<MsgRes> result = null;
+        try {
+            result = MonoSender.sendMsg(messageType, id, message, autoEscape).toFuture().get();
+
+        } catch (Exception e) {
+            log.error(e.getMessage());
+
+        }        if (result == null) {
+            return null;
+        }
+        return result.getData();
+    }
+
+    public static void sendLike(Long userId) {
+        try {
+            MonoSender.sendLike(userId).toFuture().get();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+
+
+    }
+    public static void sendLike(Long userId, Integer number) {
+        try {
+            MonoSender.sendLike(userId, number).toFuture().get();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+
+
+    }
+    public static void canSendImage() {
+        try {
+            MonoSender.canSendImage().toFuture().get();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+    }
+    public static void canSendRecord() {
+        try {
+            MonoSender.canSendRecord().toFuture().get();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+    }
 }

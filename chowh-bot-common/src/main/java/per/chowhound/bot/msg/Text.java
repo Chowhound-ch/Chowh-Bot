@@ -24,19 +24,19 @@ public class Text extends AbstractMessage {
 
     private TextData data;
 
-    @AllArgsConstructor
-    @NoArgsConstructor
-    @Data
-    static class TextData {
-        private String text;
-    }
 
     public static Text of(String msg) {
         return new Text(new TextData(msg));
     }
 
-    @Override
     public String get() {
         return data.getText();
+    }
+
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Data
+    static class TextData {
+        private String text;
     }
 }

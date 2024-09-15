@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import per.chowhound.bot.event.MessageEvent;
 import per.chowhound.bot.utils.MessagesDeserializer;
 
 import java.util.ArrayList;
@@ -14,6 +16,7 @@ import java.util.Collection;
  * @author : Chowhound
  * @since : 2024/8/10 - 13:58
  */
+@Slf4j
 @JsonDeserialize(using = MessagesDeserializer.class)
 @NoArgsConstructor
 public class Messages extends ArrayList<Message> implements Message {
@@ -27,9 +30,27 @@ public class Messages extends ArrayList<Message> implements Message {
 
     public static Messages of(Message... messages) {
         Messages msgs = new Messages();
-        msgs.addAll(Arrays.asList(messages));
+        for (Message message : messages) {
+            if (message instanceof Messages) {
+                msgs.addAll((Messages) message);
+            } else {
+                if (message instanceof Reply) {
+                    log.warn("Reply message should not be added to Messages directly");
+                }
+                msgs.add(message);
+            }
+        }
         return msgs;
     }
+    public static Messages replyOf(Reply reply, Message... messages) {
+        Messages res = of(messages);
+        res.add(0, reply);
+        return res;
+    }
+    public static Messages replyOf(Long messageId, Message... messages) {
+        return replyOf(Reply.of(messageId), messages);
+    }
+
 
 
     public static Builder builder() {
@@ -48,9 +69,23 @@ public class Messages extends ArrayList<Message> implements Message {
 
     public static class Builder {
         private final Messages messages = new Messages();
+        private Reply replied;
+
+        public Builder reply(MessageEvent event) {
+            return this.reply(event.getMessageId());
+        }
+
+        public Builder reply(Long messageId) {
+            replied = Reply.of(messageId);
+            return this;
+        }
 
         public Builder add(Message message) {
-            messages.add(message);
+            if (message instanceof Messages) {
+                messages.addAll((Messages) message);
+            } else {
+                messages.add(message);
+            }
             return this;
         }
         public Builder text(String text) {
@@ -64,11 +99,21 @@ public class Messages extends ArrayList<Message> implements Message {
         }
 
         public Builder addAll(Message... messages) {
-            this.messages.addAll(Arrays.asList(messages));
+            for (Message message : messages) {
+                add(message);
+            }
+            return this;
+        }
+
+        public Builder at(Long userId) {
+            messages.add(At.of(userId));
             return this;
         }
 
         public Messages build() {
+            if (replied != null) {
+                messages.add(0, replied);
+            }
             return messages;
         }
     }

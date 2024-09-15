@@ -11,19 +11,8 @@ public abstract class AbstractMessage extends ExpendableEntity implements Messag
     protected String type;
     protected Object data;
 
-    public static AbstractMessage of(String msg) {
-        throw new UnsupportedException("Unsupported Message Type");
-    }
-
-    public String get() {
-        throw new UnsupportedException("Unsupported Message Type");
-    }
-
     @Override
     public String toString() {
-        return get();
+        return data.toString();
     }
-
-//    public abstract class MessageData extends ExpendableEntity {
-//    }
 }

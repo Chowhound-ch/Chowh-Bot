@@ -1,7 +1,5 @@
 package per.chowhound.bot.event;
 
-import com.fasterxml.jackson.annotation.JsonSubTypes;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -19,5 +17,4 @@ public abstract class RequestEvent extends AbstractEvent{
     // 验证信息
     private String comment;
     private Long userId;
-
 }

@@ -1,6 +1,6 @@
 package per.chowhound.bot.providers.onebot;
 
-import per.chowhound.bot.Sender;
+import per.chowhound.bot.MonoSender;
 import per.chowhound.bot.entity.CheckRes;
 import per.chowhound.bot.entity.MsgRes;
 import per.chowhound.bot.entity.VoidRes;
@@ -30,7 +30,7 @@ public class OnebotSenderServiceImpl implements SenderService {
     @Override
     public Mono<Result<MsgRes>> sendMsg(String messageType, Long id, Message message, boolean autoEscape) {
         String idStr = "group_id";
-        if (messageType.equals(Sender.PRIVATE_MSG)) {
+        if (messageType.equals(MonoSender.PRIVATE_MSG)) {
             idStr = "user_id";
         }
         return HttpUtil.doPostResult("/send_msg", MsgRes.class, Map.of("message_type", messageType, idStr, id, "message", message, "auto_escape", autoEscape));

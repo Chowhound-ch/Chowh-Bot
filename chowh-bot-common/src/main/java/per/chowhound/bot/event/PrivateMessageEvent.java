@@ -3,6 +3,9 @@ package per.chowhound.bot.event;
 import com.fasterxml.jackson.annotation.JsonTypeId;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import per.chowhound.bot.Sender;
+import per.chowhound.bot.msg.Message;
+import per.chowhound.bot.msg.Messages;
 
 /**
  * @author : Chowhound
@@ -11,8 +14,9 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class PrivateMessageEvent extends MessageEvent {
-//    // 消息子类型，如果是好友则是 friend，如果是群临时会话则是 group
-//    private String subType;
-//    // 消息类型
-//    private String messageType;
+
+    @Override
+    public void reply(Message message, Boolean autoEscape) {
+        Sender.sendPrivateMsg(userId, Messages.replyOf(userId, message), autoEscape);
+    }
 }

@@ -1,148 +1,312 @@
 package per.chowhound.bot;
 
-import per.chowhound.bot.entity.VoidRes;
-import per.chowhound.bot.spi.GetterService;
-import per.chowhound.bot.spi.SetterService;
-import per.chowhound.bot.utils.Result;
-import reactor.core.publisher.Mono;
-
-import java.util.ServiceLoader;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author : Chowhound
- * @since : 2024/8/10 - 23:17
+ * @since : 2024/9/15 - 19:36
  */
+@Slf4j
 @SuppressWarnings("unused")
 public class Setter {
-    public static final String GROUP_ADD_REQUEST = "add";
-    public static final String GROUP_INVITE_REQUEST = "invite";
-    public static final Integer DEFAULT_BAN_DURATION = 60 * 5;
-    private static final SetterService SETTER;
-    static {
-        //TODO 重写加载逻辑
-        ServiceLoader<SetterService> load = ServiceLoader.load(SetterService.class);
-        SETTER = load.findFirst().get();
+
+    public static void deleteMsg(Long messageId) {
+        try {
+            MonoSetter.deleteMsg(messageId).toFuture().get();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
     }
 
-    public static Mono<Result<VoidRes>> deleteMsg(Long messageId) {
-        return SETTER.deleteMsg(messageId);
-    }
 
-    public static Mono<Result<VoidRes>> setGroupKick(Long groupId, Long userId) {
-        return SETTER.setGroupKick(groupId, userId, false);
-    }
+    public static void setGroupKick(Long groupId, Long userId) {
+        try {
+            MonoSetter.setGroupKick(groupId, userId).toFuture().get();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
 
-    public static Mono<Result<VoidRes>> setGroupKick(Long groupId, Long userId, boolean rejectAddRequest) {
-        return SETTER.setGroupKick(groupId, userId, rejectAddRequest);
-    }
 
+    }
+    public static void setGroupKick(Long groupId, Long userId, boolean rejectAddRequest) {
+        try {
+            MonoSetter.setGroupKick(groupId, userId, rejectAddRequest).toFuture().get();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+    }
     // region 群组禁言
-    public static Mono<Result<VoidRes>> setGroupBan(Long groupId, Long userId) {
-        return SETTER.setGroupBan(groupId, userId, DEFAULT_BAN_DURATION);
+    public static void setGroupBan(Long groupId, Long userId) {
+        try {
+            MonoSetter.setGroupBan(groupId, userId).toFuture().get();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+
+
     }
-    /**
-     * 单位：秒
-     * @author : Chowhound
-     * @since : 2024/08/10 - 23:44
-     */
-    public static Mono<Result<VoidRes>> setGroupBan(Long groupId, Long userId, Integer duration) {
-        return SETTER.setGroupBan(groupId, userId, duration);
+    public static void setGroupBan(Long groupId, Long userId, Integer duration) {
+        try {
+            MonoSetter.setGroupBan(groupId, userId, duration).toFuture().get();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
     }
 
-    public static Mono<Result<VoidRes>> setGroupAnonymousBan(Long groupId, String flag) {
-        return SETTER.setGroupAnonymousBan(groupId, DEFAULT_BAN_DURATION, flag);
+
+    public static void setGroupAnonymousBan(Long groupId, String flag) {
+        try {
+            MonoSetter.setGroupAnonymousBan(groupId, flag).toFuture().get();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+
+
     }
-    public static Mono<Result<VoidRes>> setGroupAnonymousBan(Long groupId, Integer duration, String flag) {
-        return SETTER.setGroupAnonymousBan(groupId, duration, flag);
-    }
-    public static Mono<Result<VoidRes>> setGroupAnonymousBan(Long groupId, Object anonymous) {
-        return SETTER.setGroupAnonymousBan(groupId, DEFAULT_BAN_DURATION, anonymous);
-    }
-    public static Mono<Result<VoidRes>> setGroupAnonymousBan(Long groupId, Integer duration, Object anonymous) {
-        return SETTER.setGroupAnonymousBan(groupId, duration, anonymous);
+    public static void setGroupAnonymousBan(Long groupId, Integer duration, String flag) {
+        try {
+            MonoSetter.setGroupAnonymousBan(groupId, duration, flag).toFuture().get();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
     }
 
-    public static Mono<Result<VoidRes>> setGroupWholeBan(Long groupId) {
-        return SETTER.setGroupWholeBan(groupId, true);
+
+    public static void setGroupAnonymousBan(Long groupId, Object anonymous) {
+        try {
+            MonoSetter.setGroupAnonymousBan(groupId, anonymous).toFuture().get();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
     }
-    public static Mono<Result<VoidRes>> setGroupWholeBan(Long groupId, boolean enable) {
-        return SETTER.setGroupWholeBan(groupId, enable);
+
+
+    public static void setGroupAnonymousBan(Long groupId, Integer duration, Object anonymous) {
+        try {
+            MonoSetter.setGroupAnonymousBan(groupId, duration, anonymous).toFuture().get();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
     }
-    // endregion
+
+
+    public static void setGroupWholeBan(Long groupId) {
+        try {
+            MonoSetter.setGroupWholeBan(groupId).toFuture().get();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+    }
+
+
+    public static void setGroupWholeBan(Long groupId, boolean enable) {
+        try {
+            MonoSetter.setGroupWholeBan(groupId, enable).toFuture().get();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+
+
+    }// endregion
     // region 群组管理
-    public static Mono<Result<VoidRes>> setGroupAdmin(Long groupId, Long userId) {
-        return SETTER.setGroupAdmin(groupId, userId, true);
-    }
-    public static Mono<Result<VoidRes>> setGroupAdmin(Long groupId, Long userId, boolean enable) {
-        return SETTER.setGroupAdmin(groupId, userId, enable);
+
+    public static void setGroupAdmin(Long groupId, Long userId) {
+        try {
+            MonoSetter.setGroupAdmin(groupId, userId).toFuture().get();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
     }
 
-    public static Mono<Result<VoidRes>> setGroupAnonymous(Long groupId) {
-        return SETTER.setGroupAnonymous(groupId, true);
-    }
-    public static Mono<Result<VoidRes>> setGroupAnonymous(Long groupId, boolean enable) {
-        return SETTER.setGroupAnonymous(groupId, enable);
+
+    public static void setGroupAdmin(Long groupId, Long userId, boolean enable) {
+        try {
+            MonoSetter.setGroupAdmin(groupId, userId, enable).toFuture().get();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
     }
 
-    public static Mono<Result<VoidRes>> setGroupCard(Long groupId, Long userId, String card) {
-        return SETTER.setGroupCard(groupId, userId, card);
-    }
-    public static Mono<Result<VoidRes>> deleteGroupCard(Long groupId, Long userId) {
-        return SETTER.setGroupCard(groupId, userId, "");
+
+    public static void setGroupAnonymous(Long groupId) {
+        try {
+            MonoSetter.setGroupAnonymous(groupId).toFuture().get();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
     }
 
-    public static Mono<Result<VoidRes>> setGroupName(Long groupId, String groupName) {
-        return SETTER.setGroupName(groupId, groupName);
+
+    public static void setGroupAnonymous(Long groupId, boolean enable) {
+        try {
+            MonoSetter.setGroupAnonymous(groupId, enable).toFuture().get();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
     }
 
-    public static Mono<Result<VoidRes>> setGroupLeave(Long groupId) {
-        return SETTER.setGroupLeave(groupId, false);
-    }
-    public static Mono<Result<VoidRes>> setGroupLeave(Long groupId, boolean isDismiss) {
-        return SETTER.setGroupLeave(groupId, isDismiss);
+
+    public static void setGroupCard(Long groupId, Long userId, String card) {
+        try {
+            MonoSetter.setGroupCard(groupId, userId, card).toFuture().get();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
     }
 
-    public static Mono<Result<VoidRes>> setGroupSpecialTitle(Long groupId, Long userId, String specialTitle, Integer duration) {
-        return SETTER.setGroupSpecialTitle(groupId, userId, specialTitle, duration);
+
+    public static void deleteGroupCard(Long groupId, Long userId) {
+        try {
+            MonoSetter.setGroupCard(groupId, userId, "").toFuture().get();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
     }
-    public static Mono<Result<VoidRes>> setGroupSpecialTitle(Long groupId, Long userId, String specialTitle) {
-        return SETTER.setGroupSpecialTitle(groupId, userId, specialTitle, -1);
+
+
+    public static void setGroupName(Long groupId, String groupName) {
+        try {
+            MonoSetter.setGroupName(groupId, groupName).toFuture().get();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
     }
-    public static Mono<Result<VoidRes>> deleteGroupSpecialTitle(Long groupId, Long userId) {
-        return SETTER.setGroupSpecialTitle(groupId, userId, "", -1);
+
+
+    public static void setGroupLeave(Long groupId) {
+        try {
+            MonoSetter.setGroupLeave(groupId).toFuture().get();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
     }
-    // endregion
+
+
+    public static void setGroupLeave(Long groupId, boolean isDismiss) {
+        try {
+            MonoSetter.setGroupLeave(groupId, isDismiss).toFuture().get();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+    }
+
+
+    public static void setGroupSpecialTitle(Long groupId, Long userId, String specialTitle, Integer duration) {
+        try {
+            MonoSetter.setGroupSpecialTitle(groupId, userId, specialTitle, duration).toFuture().get();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+    }
+
+
+    public static void setGroupSpecialTitle(Long groupId, Long userId, String specialTitle) {
+        try {
+            MonoSetter.setGroupSpecialTitle(groupId, userId, specialTitle).toFuture().get();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+    }
+
+
+    public static void deleteGroupSpecialTitle(Long groupId, Long userId) {
+        try {
+            MonoSetter.setGroupSpecialTitle(groupId, userId, "", -1).toFuture().get();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+
+
+    }// endregion
     // region 加好友/群
-    public static Mono<Result<VoidRes>> approveFriendAddRequest(String flag) {
-        return SETTER.setFriendAddRequest(flag, true, "");
-    }
-    public static Mono<Result<VoidRes>> rejectFriendAddRequest(String flag) {
-        return SETTER.setFriendAddRequest(flag, false, "");
-    }
-    public static Mono<Result<VoidRes>> approveFriendAddRequest(String flag, String remark) {
-        return SETTER.setFriendAddRequest(flag, true, remark);
-    }
-    public static Mono<Result<VoidRes>> setFriendAddRequest(String flag, boolean approve, String remark) {
-        return SETTER.setFriendAddRequest(flag, approve, remark);
-    }
-    public static Mono<Result<VoidRes>> setFriendAddRequest(String flag, boolean approve) {
-        return SETTER.setFriendAddRequest(flag, approve, "");
+
+    public static void approveFriendAddRequest(String flag) {
+        try {
+            MonoSetter.approveFriendAddRequest(flag).toFuture().get();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
     }
 
-    public static Mono<Result<VoidRes>> approveGroupAddRequest(String flag, String type) {
-        return SETTER.setGroupAddRequest(flag, type, true, "");
+
+    public static void rejectFriendAddRequest(String flag) {
+        try {
+            MonoSetter.rejectFriendAddRequest(flag).toFuture().get();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
     }
-    public static Mono<Result<VoidRes>> rejectGroupAddRequest(String flag, String type) {
-        return SETTER.setGroupAddRequest(flag, type, false, "");
+
+
+    public static void approveFriendAddRequest(String flag, String remark) {
+        try {
+            MonoSetter.approveFriendAddRequest(flag, remark).toFuture().get();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
     }
-    public static Mono<Result<VoidRes>> rejectGroupAddRequest(String flag, String type, String reason) {
-        return SETTER.setGroupAddRequest(flag, type, false, reason);
+
+
+    public static void setFriendAddRequest(String flag, boolean approve, String remark) {
+        try {
+            MonoSetter.setFriendAddRequest(flag, approve, remark).toFuture().get();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
     }
-    public static Mono<Result<VoidRes>> setGroupAddRequest(String flag, String type, boolean approve) {
-        return SETTER.setGroupAddRequest(flag, type, approve, "");
+
+
+    public static void setFriendAddRequest(String flag, boolean approve) {
+        try {
+            MonoSetter.setFriendAddRequest(flag, approve).toFuture().get();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
     }
-    public static Mono<Result<VoidRes>> setGroupAddRequest(String flag, String type, boolean approve, String reason) {
-        return SETTER.setGroupAddRequest(flag, type, approve, reason);
+
+
+    public static void approveGroupAddRequest(String flag, String type) {
+        try {
+            MonoSetter.approveGroupAddRequest(flag, type).toFuture().get();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+    }
+
+
+    public static void rejectGroupAddRequest(String flag, String type) {
+        try {
+            MonoSetter.rejectGroupAddRequest(flag, type).toFuture().get();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+    }
+
+
+    public static void rejectGroupAddRequest(String flag, String type, String reason) {
+        try {
+            MonoSetter.rejectGroupAddRequest(flag, type, reason).toFuture().get();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+    }
+
+
+    public static void setGroupAddRequest(String flag, String type, boolean approve) {
+        try {
+            MonoSetter.setGroupAddRequest(flag, type, approve).toFuture().get();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+    }
+
+
+    public static void setGroupAddRequest(String flag, String type, boolean approve, String reason) {
+        try {
+            MonoSetter.setGroupAddRequest(flag, type, approve, reason).toFuture().get();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
     }
 
 }

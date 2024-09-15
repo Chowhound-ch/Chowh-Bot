@@ -1,108 +1,283 @@
 package per.chowhound.bot;
 
+import lombok.extern.slf4j.Slf4j;
 import per.chowhound.bot.entity.*;
 import per.chowhound.bot.msg.Record;
-import per.chowhound.bot.spi.GetterService;
 import per.chowhound.bot.utils.Result;
-import reactor.core.publisher.Mono;
 
 import java.util.List;
-import java.util.ServiceLoader;
 
 /**
  * @author : Chowhound
- * @since : 2024/8/8 - 22:48
+ * @since : 2024/9/15 - 19:36
  */
+@Slf4j
 @SuppressWarnings("unused")
 public class Getter {
-    private static final GetterService GETTER;
-    static {
-         //TODO 重写加载逻辑
-        ServiceLoader<GetterService> load = ServiceLoader.load(GetterService.class);
-        GETTER = load.findFirst().get();
+
+    public static Bot getBotInfo() {
+        Result<Bot> result = null;
+        try {
+            result = MonoGetter.getBotInfo().toFuture().get();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+        if (result == null) {
+            return null;
+        }
+        return result.getData();
     }
 
-    public static Mono<Result<Bot>> getBotInfo() {
-        return GETTER.getBotInfo();
+    public static MessageInfo getMsg(Long messageId) {
+        Result<MessageInfo> result = null;
+        try {
+            result = MonoGetter.getMsg(messageId).toFuture().get();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+
+        if (result == null) {
+            return null;
+        }
+        return result.getData();
     }
 
-    public static Mono<Result<MessageInfo>> getMsg(Long messageId) {
-        return GETTER.getMsg(messageId);
+    public static List<Friend> getFriendList() {
+        Result<List<Friend>> result = null;
+        try {
+            result = MonoGetter.getFriendList().toFuture().get();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+
+        if (result == null) {
+            return null;
+        }
+        return result.getData();
     }
 
-    public static Mono<Result<List<Friend>>> getFriendList() {
-        return Getter.GETTER.getFriendList();
+    public static Group getGroupInfo(Long group_id) {
+        Result<Group> result = null;
+        try {
+            result = MonoGetter.getGroupInfo(group_id).toFuture().get();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+
+        if (result == null) {
+            return null;
+        }
+        return result.getData();
     }
 
-    /**
-     * 默认使用缓存
-     * @author : Chowhound
-     * @since : 2024/08/10 - 14:42
-     */
-    public static Mono<Result<Group>> getGroupInfo(Long group_id) {
-        return GETTER.getGroupInfo(group_id, true);
+    public static Group getGroupInfo(Long group_id, boolean noCache) {
+        Result<Group> result = null;
+        try {
+            result = MonoGetter.getGroupInfo(group_id, noCache).toFuture().get();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+
+        if (result == null) {
+            return null;
+        }
+        return result.getData();
     }
 
-    public static Mono<Result<Group>> getGroupInfo(Long group_id, boolean noCache) {
-        return GETTER.getGroupInfo(group_id, noCache);
+    public static List<Group> getGroupList() {
+        Result<List<Group>> result = null;
+        try {
+            result = MonoGetter.getGroupList().toFuture().get();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+
+        if (result == null) {
+            return null;
+        }
+        return result.getData();
     }
 
-    public static Mono<Result<List<Group>>> getGroupList() {
-        return GETTER.getGroupList();
-    }
-    /**
-     * 默认使用缓存
-     * @author : Chowhound
-     * @since : 2024/08/10 - 14:57
-     */
-    public static Mono<Result<GroupMember>> getGroupMemberInfo(Long groupId, Long userId) {
-        return GETTER.getGroupMemberInfo(groupId, userId, true);
-    }
-    public static Mono<Result<GroupMember>> getGroupMemberInfo(Long groupId, Long userId, boolean noCache) {
-        return GETTER.getGroupMemberInfo(groupId, userId, noCache);
+    public static GroupMember getGroupMemberInfo(Long groupId, Long userId) {
+        Result<GroupMember> result = null;
+        try {
+            result = MonoGetter.getGroupMemberInfo(groupId, userId).toFuture().get();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+
+        if (result == null) {
+            return null;
+        }
+        return result.getData();
     }
 
-    public static Mono<Result<List<GroupMember>>> getGroupMemberList(Long groupId) {
-        return GETTER.getGroupMemberList(groupId);
+    public static GroupMember getGroupMemberInfo(Long groupId, Long userId, boolean noCache) {
+        Result<GroupMember> result = null;
+        try {
+            result = MonoGetter.getGroupMemberInfo(groupId, userId, noCache).toFuture().get();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+
+        if (result == null) {
+            return null;
+        }
+        return result.getData();
     }
 
-    public static Mono<Result<GroupHonorInfo>> getGroupHonorInfo(Long groupId, String type) {
-        return GETTER.getGroupHonorInfo(groupId, type);
+    public static List<GroupMember> getGroupMemberList(Long groupId) {
+        Result<List<GroupMember>> result = null;
+        try {
+            result = MonoGetter.getGroupMemberList(groupId).toFuture().get();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+
+        if (result == null) {
+            return null;
+        }
+        return result.getData();
     }
 
-    public static Mono<Result<Cookies>> getCookies() {
-        return getCookies("");
-    }
-    public static Mono<Result<Cookies>> getCookies(String domain) {
-        return GETTER.getCookies(domain);
+    public static GroupHonorInfo getGroupHonorInfo(Long groupId, String type) {
+        Result<GroupHonorInfo> result = null;
+        try {
+            result = MonoGetter.getGroupHonorInfo(groupId, type).toFuture().get();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+
+        if (result == null) {
+            return null;
+        }
+        return result.getData();
     }
 
-    public static Mono<Result<Token>> getCsrfToken() {
-        return GETTER.getCsrfToken();
+    public static Cookies getCookies() {
+        Result<Cookies> result = null;
+        try {
+            result = MonoGetter.getCookies().toFuture().get();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+
+        if (result == null) {
+            return null;
+        }
+        return result.getData();
     }
 
-    public static Mono<Result<Credentials>> getCredentials() {
-        return GETTER.getCredentials("");
-    }
-    public static Mono<Result<Credentials>> getCredentials(String domain) {
-        return GETTER.getCredentials(domain);
+    public static Cookies getCookies(String domain) {
+        Result<Cookies> result = null;
+        try {
+            result = MonoGetter.getCookies(domain).toFuture().get();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+
+        if (result == null) {
+            return null;
+        }
+        return result.getData();
     }
 
-    ///提示：要使用此接口，通常需要安装 ffmpeg，请参考 机器人框架 实现的相关说明。
-    // TODO 待确认是 Result<Record> 还是 Result<String>
-    public static Mono<Result<Record>> getRecord(String file, String outFormat) {
-        return GETTER.getRecord(file, outFormat);
-    }
-    // TODO 待确认是 Result<Image> 还是 Result<String>
-    public static Mono<Result<String>> getImage(String image) {
-        return GETTER.getImage(image);
+    public static Token getCsrfToken() {
+        Result<Token> result = null;
+        try {
+            result = MonoGetter.getCsrfToken().toFuture().get();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+
+        if (result == null) {
+            return null;
+        }
+        return result.getData();
     }
 
-    public static Mono<Result<Status>> getStatus() {
-        return GETTER.getStatus();
+    public static Credentials getCredentials() {
+        Result<Credentials> result = null;
+        try {
+            result = MonoGetter.getCredentials().toFuture().get();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+
+        if (result == null) {
+            return null;
+        }
+        return result.getData();
     }
 
-    public static Mono<Result<VersionInfo>> getVersionInfo() {
-        return GETTER.getVersionInfo();
+    public static Credentials getCredentials(String domain) {
+        Result<Credentials> result = null;
+        try {
+            result = MonoGetter.getCredentials(domain).toFuture().get();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+
+        if (result == null) {
+            return null;
+        }
+        return result.getData();
+    }
+
+    public static Record getRecord(String file, String outFormat) {
+        Result<Record> result = null;
+        try {
+            result = MonoGetter.getRecord(file, outFormat).toFuture().get();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+
+        if (result == null) {
+            return null;
+        }
+        return result.getData();
+    }
+
+    public static String getImage(String image) {
+        Result<String> result = null;
+        try {
+            result = MonoGetter.getImage(image).toFuture().get();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+
+        if (result == null) {
+            return null;
+        }
+        return result.getData();
+    }
+
+
+    public static Status getStatus() {
+        Result<Status> result = null;
+        try {
+            result = MonoGetter.getStatus().toFuture().get();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+
+        if (result == null) {
+            return null;
+        }
+        return result.getData();
+    }
+
+    public static VersionInfo getVersionInfo() {
+        Result<VersionInfo> result = null;
+        try {
+            result = MonoGetter.getVersionInfo().toFuture().get();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+
+        if (result == null) {
+            return null;
+        }
+        return result.getData();
     }
 }

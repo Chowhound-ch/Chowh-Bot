@@ -1,13 +1,13 @@
 package per.chowhound.bot.event;
 
-import com.fasterxml.jackson.annotation.JsonSubTypes;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
+import per.chowhound.bot.Setter;
 import per.chowhound.bot.entity.MessageSender;
+import per.chowhound.bot.msg.Message;
 import per.chowhound.bot.msg.Messages;
+import per.chowhound.bot.msg.Text;
+
 
 /**
  * @author : Chowhound
@@ -15,7 +15,7 @@ import per.chowhound.bot.msg.Messages;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class MessageEvent extends AbstractEvent {
+public abstract class MessageEvent extends AbstractEvent {
     // 消息类型
     protected String messageType;
     protected String subType;
@@ -31,4 +31,19 @@ public class MessageEvent extends AbstractEvent {
     protected Long font;
     // 发送人信息
     protected MessageSender sender;
+
+
+    public abstract void reply(Message message, Boolean autoEscape);
+
+    public void reply(Message message) {
+        this.reply(message, false);
+    }
+
+    public void reply(String message) {
+        this.reply(Text.of(message));
+    }
+
+    public void delete() {
+        Setter.deleteMsg(messageId);
+    }
 }

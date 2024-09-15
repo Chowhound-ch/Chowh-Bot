@@ -2,8 +2,14 @@ package per.chowhound.bot.event;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import per.chowhound.bot.MonoSender;
+import per.chowhound.bot.Sender;
+import per.chowhound.bot.Setter;
 import per.chowhound.bot.entity.Anonymous;
 import per.chowhound.bot.entity.GroupMessageSender;
+import per.chowhound.bot.msg.Message;
+import per.chowhound.bot.msg.Messages;
+import per.chowhound.bot.msg.Reply;
 
 /**
  * @author : Chowhound
@@ -23,4 +29,18 @@ public class GroupMessageEvent extends MessageEvent {
 
     private GroupMessageSender sender;
 
+    public void reply(Message message, Boolean atSender, Boolean autoEscape) {
+        Messages.Builder msgBuilder = Messages.builder().reply(messageId);
+        if (atSender) {
+            msgBuilder.at(sender.getUserId());
+        }
+        msgBuilder.add(message);
+
+        Sender.sendGroupMsg(groupId, msgBuilder.build(), autoEscape);
+    }
+
+    @Override
+    public void reply(Message message, Boolean autoEscape) {
+        reply(message, true, autoEscape);
+    }
 }

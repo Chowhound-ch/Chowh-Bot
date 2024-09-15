@@ -2,6 +2,11 @@ package per.chowhound.bot.event.response;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.extern.java.Log;
+import per.chowhound.bot.MonoSender;
+import per.chowhound.bot.Sender;
+import per.chowhound.bot.event.Event;
+import per.chowhound.bot.event.PrivateMessageEvent;
 import per.chowhound.bot.msg.Message;
 import per.chowhound.bot.msg.Text;
 
@@ -11,10 +16,20 @@ import per.chowhound.bot.msg.Text;
  */
 @NoArgsConstructor
 @SuppressWarnings("unused")
+@Log
 @Data
 public class FriendMsgResponse implements EventResponse {
     private Message reply;
     private Boolean autoEscape = false;
+
+    @Override
+    public void imitateResponse(Event event) {
+        if (! (event instanceof PrivateMessageEvent privateMessageEvent)) {
+            log.warning("不支持的事件类型");
+            return;
+        }
+        privateMessageEvent.reply(reply,autoEscape);
+    }
 
     public FriendMsgResponse(Message reply) {
         this.reply = reply;

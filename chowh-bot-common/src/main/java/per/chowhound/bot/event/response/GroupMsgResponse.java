@@ -3,6 +3,11 @@ package per.chowhound.bot.event.response;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.extern.java.Log;
+import per.chowhound.bot.Setter;
+import per.chowhound.bot.event.Event;
+import per.chowhound.bot.event.FriendAddRequestEvent;
+import per.chowhound.bot.event.GroupMessageEvent;
 import per.chowhound.bot.msg.Message;
 import per.chowhound.bot.msg.Text;
 
@@ -12,6 +17,8 @@ import per.chowhound.bot.msg.Text;
  */
 @AllArgsConstructor
 @NoArgsConstructor
+@Log
+@SuppressWarnings("unused")
 @Data
 public class GroupMsgResponse implements EventResponse {
     // 要回复的内容
@@ -29,6 +36,34 @@ public class GroupMsgResponse implements EventResponse {
     // 禁言时长
     private Integer banDuration = 30;
 
+    @Override
+    public void imitateResponse(Event event) {
+        if (!(event instanceof GroupMessageEvent groupMessageEvent)) {
+            log.warning("不支持的事件类型");
+            return;
+        }
+        groupMessageEvent.reply(reply, atSender, autoEscape);
+
+        if (delete) {
+            groupMessageEvent.delete();
+        }
+
+        if (ban) {
+            Setter.setGroupBan(
+                    groupMessageEvent.getGroupId(),
+                    groupMessageEvent.getSender().getUserId(),
+                    banDuration
+            );
+        }
+
+        if (kick) {
+            Setter.setGroupKick(
+                    groupMessageEvent.getGroupId(),
+                    groupMessageEvent.getSender().getUserId(),
+                    false
+            );
+        }
+    }
 
     public GroupMsgResponse(Message reply) {
         this.reply = reply;
